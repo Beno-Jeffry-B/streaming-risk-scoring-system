@@ -1,47 +1,68 @@
-# Streaming Risk Scoring System
+# Real-Time Transaction Risk Scoring (Streaming ML)
 
-## Introduction
+## Overview
+This project is a **real-time streaming machine learning application** built using **Streamlit** and **scikit-learn**.  
+It simulates continuous transaction data and uses an **online learning model** to generate **live transaction risk scores**.
 
-The Streaming Risk Scoring System is a robust platform designed to assess risk in real time for streaming data sources. It leverages modern data processing and analytics techniques to score events, transactions, or entities as they flow through the system. This enables proactive risk management, fraud detection, and real-time decision-making. The system supports various data input formats and integrates easily with external services.
+The model is trained incrementally using `partial_fit`, allowing it to **learn and adapt in real time** without batch retraining.
 
-## Features
+---
 
-- Real-time risk scoring for streaming data.
-- Modular architecture for easy customization.
-- Plug-and-play risk models and rules.
-- RESTful API for integrating with external systems.
-- Support for batch and streaming data ingestion.
-- Configurable threshold and action triggers.
-- Detailed logging and error handling.
-- Extensible with custom plugins or rules.
+## Live Demo
+🔗 https://streaming-risk-scoring-system.streamlit.app/
 
-## Usage
+---
 
-To use the Streaming Risk Scoring System:
+## What This Project Does
+- Simulates streaming transaction data
+- Trains an ML model incrementally on each incoming event
+- Predicts a transaction risk score (0–100) in real time
+- Displays live data and predictions on an interactive dashboard
 
-- Start the backend server to initialize the risk engine.
-- Send your streaming or batch data to the provided API endpoints.
-- The system processes each record and returns a risk score along with detailed reasoning.
-- Set up action triggers based on risk scores to automate responses (e.g., flag, escalate, or block).
+---
 
-Basic workflow:
+## Risk Score Meaning
+The model outputs a **risk score between 0 and 100**:
 
-1. Configure your risk rules and thresholds.
-2. Start the service using the installation instructions.
-3. Use the API endpoints to submit data and retrieve scores.
-4. Integrate the scoring results with your business processes.
+- **0–30** → Low Risk  
+- **30–70** → Medium Risk  
+- **70–100** → High Risk  
 
-## Configuration
+These scores are generated from synthetic data to demonstrate real-time online learning behavior.
 
-The system is highly configurable. Main configuration options include:
+---
 
-- **Risk Rules**: Define custom rules for scoring.
-- **Input Data Schema**: Specify required data fields and types.
-- **Thresholds**: Set low, medium, and high-risk thresholds.
-- **Integration Hooks**: Configure webhooks or notification endpoints.
-- **Logging**: Adjust verbosity and log destinations.
+## How It Works
+1. Transaction data is generated continuously (amount and velocity).
+2. Each data point is processed immediately.
+3. Features are scaled incrementally.
+4. The model predicts a risk score.
+5. The model updates itself using the same data point.
+6. Results are visualized live in Streamlit.
 
-Configuration is typically managed via a YAML or JSON file located in the project’s config directory. Custom models or rules can be added by extending the relevant modules.
+---
+
+## Tech Stack
+- Python
+- Streamlit
+- scikit-learn (PassiveAggressiveRegressor)
+- Pandas, NumPy
+
+---
+
+## Project Structure
+```
+streaming-risk-scoring-system/
+├── app.py              # Streamlit dashboard
+├── data_generator.py   # Streaming data generator
+├── model.py            # Online ML model
+├── requirements.txt
+└── README.md
+```
+
+
+
+
 
 ## Installation
 
@@ -62,7 +83,7 @@ Follow these steps to install and run the Streaming Risk Scoring System:
 
 4. Start the service:
    ```bash
-   python main.py
+   python app.py
    ```
 
 5. Access the API endpoints using your preferred HTTP client or integrate with your application.
