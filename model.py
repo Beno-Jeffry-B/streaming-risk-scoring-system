@@ -1,32 +1,33 @@
+# model.py
 import numpy as np
-from sklearn.linear_model import PassiveAggressiveRegressor
+from sklearn.linear_model import SGDClassifier
 from sklearn.preprocessing import StandardScaler
 
-scaler = StandardScaler()
-model = PassiveAggressiveRegressor(max_iter=1, tol=None)
+class OnlineRiskModel:
+    """
+    Incremental risk model that adapts continuously
+    as new transaction events arrive.
+    """
+    def __init__(self):
+        self.scaler = StandardScaler()
+        self.model = SGDClassifier(loss="log_loss")
+        self.initialized = False
 
-trained = False
+    def score_and_update(self, amount, velocity):
+        X = np.array([[amount, velocity]])
 
+        # synthetic supervision signal (proxy label)
+        y = np.array([1 if amount > 3000 and velocity > 7 else 0])
 
-def train_and_predict(amount, velocity):
-    global trained
+        if not self.initialized:
+            self.scaler.partial_fit(X)
+            X_scaled = self.scaler.transform(X)
+            self.model.partial_fit(X_scaled, y, classes=[0, 1])
+            self.initialized = True
+            return 0.0
 
-    X = np.array([[amount, velocity]])
+        X_scaled = self.scaler.transform(X)
+        prob = self.model.predict_proba(X_scaled)[0][1]
+        self.model.partial_fit(X_scaled, y)
 
-    raw_score = 0.6 * amount + 0.4 * velocity
-    y = np.array([min(raw_score / 50, 100)])
-
-    if not trained:
-        scaler.partial_fit(X)
-        X_scaled = scaler.transform(X)
-        model.partial_fit(X_scaled, y)
-        trained = True
-        prediction = y[0]
-    else:
-        X_scaled = scaler.transform(X)
-        prediction = model.predict(X_scaled)[0]
-        model.partial_fit(X_scaled, y)
-
-    # Clamp output
-    prediction = max(0, min(prediction, 100))
-    return round(float(prediction), 2)
+        return round(float(prob), 3)
