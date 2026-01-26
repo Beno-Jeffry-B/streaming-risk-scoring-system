@@ -1,3 +1,7 @@
+from online_streaming.data_generator import generate_transaction_event
+from online_streaming.model import OnlineRiskModel
+
+
 import streamlit as st
 import pandas as pd
 import time
