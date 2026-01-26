@@ -1,4 +1,5 @@
 # Real-Time Transaction Risk Scoring (Streaming ML)
+## [Live Demo](https://streaming-risk-scoring-system-qzrfjxqmgxcjviybbl4smc.streamlit.app/)
 
 ## Overview
 This project is a **real-time streaming machine learning application** built using **Streamlit** and **scikit-learn**.  
@@ -8,10 +9,9 @@ The model is trained incrementally using `partial_fit`, allowing it to **learn a
 
 ---
 
-## Live Demo
-🔗 https://streaming-risk-scoring-system.streamlit.app/
 
----
+
+
 
 ## What This Project Does
 - Simulates streaming transaction data
